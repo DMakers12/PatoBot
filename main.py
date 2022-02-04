@@ -79,14 +79,6 @@ async def texto(ctx, *texto:str):
 
 
 @bot.command(pass_context=True)
-async def roles(ctx):
-  mensaje = await ctx.send("Reacciona con los colores que quieras!\nRojo: :red_circle:\nAmarillo: :yellow_circle: \nVerde: :green_circle:")
-  await mensaje.add_reaction("🔴")
-  await mensaje.add_reaction("🟡")
-  await mensaje.add_reaction("🟢")
-
-
-@bot.command(pass_context=True)
 async def mandarImagen(ctx):
   while True:
     imagen = discord.File("imagen.png", filename="imagen.png")
@@ -98,33 +90,6 @@ async def mandarImagen(ctx):
 async def parar(ctx):
   await ctx.send("Apagando bot...")
   await bot.close()
-
-
-@bot.event
-async def on_raw_reaction_add(payload):
-  channel = await bot.fetch_channel(payload.channel_id)
-  message = await channel.fetch_message(payload.message_id)
-  user = await bot.fetch_user(payload.user_id)
-  emoji = payload.emoji
-  if user == bot.user:
-    return
-  if message.author == bot.user:
-    if message.content.find("Reacciona con los colores que quieras!") != -1:
-      member = message.guild.get_member(payload.user_id)
-      with open('roles.json', "r+") as f:
-        roles = json.load(f)
-      if str(emoji) == "🔴":
-        rolid = int(roles["rojo"])
-        rol = message.guild.get_role(rolid)
-        await member.add_roles(rol)
-      elif emoji == "🟡":
-        rolid = int(roles["amarillo"])
-        rol = message.guild.get_role(rolid)
-        await bot.add_role(user, rol)
-      elif emoji == "🟢":
-        rolid = int(roles["verde"])
-        rol = message.guild.get_role(rolid)
-        user.add_role(rol)
 
 
 @bot.event
